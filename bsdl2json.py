@@ -48,7 +48,7 @@ class BsdlFile:
                     line = line.strip()
                     if "--" in line:
                         line = line.split("--")[0].strip()
-                    if "PHYSICAL_PIN_MAP" in line:
+                    if "PHYSICAL_PIN_MAP" in line.upper():
                         regex = re.compile('\"(.*)\"')
                         self.package = regex.search(line).group(1)
                     if ");" in line:
@@ -80,7 +80,7 @@ class BsdlFile:
                     if "--" in line:
                         line = line.split("--")[0].strip()
                     if "\"" in line:
-                        pin_map_string += line.rstrip("&").strip().replace("\"","")
+                        pin_map_string += line.replace("&","").replace("\"","").rstrip(";").strip()
                     if line.endswith(";"):
                         pin_map_list = pin_map_string.split(",")
                         current_signal = None

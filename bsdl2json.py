@@ -30,6 +30,11 @@ class BsdlFile:
         self.package = ""
         self.port_desc = {}
         self.pin_map = {}
+        self.instruction_length = 0
+        self.instruction_opcodes = {}
+        self.idcode = ""
+        self.boundary_length = 0
+        self.boundary_register = {}
 
     def parse(self):
         file_lines = open(self.bsdl_file, 'r').readlines()
@@ -99,6 +104,69 @@ class BsdlFile:
                                 self.pin_map[item] = current_signal
                         end = True
                     i += 1
+            elif compare_line.startswith("attribute"):
+                if "INSTRUCTION_LENGTH" in compare_line.upper():
+                        regex = re.compile('\s+([0-9]+)\s*;')
+                        self.instruction_length = int(regex.search(line).group(1))
+                        i += 1
+                elif "INSTRUCTION_OPCODE" in compare_line.upper():
+                    opcodes_string = ""
+                    end = False
+                    while not end:
+                        line = file_lines[i].strip('\n').strip('\r')
+                        line = line.strip()
+                        if "--" in line:
+                            line = line.split("--")[0].strip()
+                        if "\"" in line:
+                            opcodes_string += line.rstrip("&").strip().replace("\"","").rstrip(";")
+                        if line.endswith(";"):
+                            opcodes_list = opcodes_string.split(",")
+                            for opcode in opcodes_list:
+                                split_opcode = opcode.split("(")
+                                mnemonic = split_opcode[0].strip()
+                                code = split_opcode[1].replace(")","").strip()
+                                self.instruction_opcodes[mnemonic] = code
+                            end = True
+                        i += 1
+                elif "IDCODE_REGISTER" in compare_line.upper():
+                    idcode_string = ""
+                    end = False
+                    while not end:
+                        line = file_lines[i].strip('\n').strip('\r')
+                        line = line.strip()
+                        if "--" in line:
+                            line = line.split("--")[0].strip()
+                        if "\"" in line:
+                            idcode_string += line.replace("&","").replace("\"","").rstrip(";").strip()
+                        if line.endswith(";"):
+                            self.idcode = idcode_string
+                            end = True
+                        i += 1
+                elif "BOUNDARY_LENGTH" in compare_line.upper():
+                    regex = re.compile('\s+([0-9]+)\s*;')
+                    self.boundary_length = int(regex.search(line).group(1))
+                    i += 1
+                elif "BOUNDARY_REGISTER" in compare_line.upper():
+                    boundary_register_list = []
+                    end = False
+                    while not end:
+                        line = file_lines[i].strip('\n').strip('\r')
+                        line = line.strip()
+                        if "--" in line:
+                            line = line.split("--")[0].strip()
+                        if "\"" in line:
+                            boundary_register_list.append(line.replace("&","").replace("\"","").rstrip(";").strip())
+                        if line.endswith(";"):
+                            current_bit = None
+                            for item in boundary_register_list:
+                                split_item = item.split("(")
+                                register_bit = int(split_item[0].strip())
+                                signal = split_item[1].replace(")","").rstrip(",").replace(" ","").split(",")
+                                self.boundary_register[register_bit] = signal
+                            end = True
+                        i += 1
+                else:
+                    i += 1
             else:
                 i += 1
 
@@ -108,6 +176,11 @@ class BsdlFile:
             "package": self.package,
             "port_desc": self.port_desc,
             "pin_map": self.pin_map,
+            "instruction_length": self.instruction_length,
+            "instruction_opcodes": self.instruction_opcodes,
+            "idcode": self.idcode,
+            "boundary_length": self.boundary_length,
+            "boundary_register": self.boundary_register,
         }
         return json.dumps(dictionary)
 

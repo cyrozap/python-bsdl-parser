@@ -128,3 +128,11 @@ TDO_stmt = "attribute" "TAP_SCAN_OUT" "of" port_ID colon "signal" "is" "true" se
 TRST_stmt = "attribute" "TAP_SCAN_RESET" "of" port_ID colon "signal" "is" "true" semicolon ;
 clock_record = real comma halt_state_value ;
 halt_state_value = "LOW" | "BOTH" ;
+
+(* B.8.10 *)
+compliance_enable_description = "attribute" "COMPLIANCE_PATTERNS" "of"
+    component_name colon "entity" "is" compliance_pattern_string semicolon ;
+compliance_pattern_string = quote left_paren compliance_port_list right_paren
+    left_paren pattern_list right_paren quote ;
+compliance_port_list = port_ID { comma port_ID } ;
+pattern_list = pattern { comma pattern } ;

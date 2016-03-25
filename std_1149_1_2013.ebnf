@@ -509,3 +509,19 @@ cell_context = "INPUT" | "OUTPUT2" | "OUTPUT3" | "INTERNAL" | "CONTROL" |
     "CONTROLR" | "CLOCK" | "BIDIR_IN" | "BIDIR_OUT" | "OBSERVE_ONLY" ;
 capture_instruction = "EXTEST" | "SAMPLE" | "INTEST" ;
 data_source = "PI" | "PO" | "CAP" | "UPD" | "ZERO" | "ONE" | "X" ;
+
+(* Character definitions *)
+asterisk = "*";
+colon = ":";
+colon_equal = ":=";
+comma = ",";
+left_brace = "{";
+left_bracket = "[";
+left_paren = "(";
+minus_sign = "-";
+period = ".";
+quote = '"';
+right_brace = "}";
+right_bracket = "]";
+right_paren = ")";
+semicolon = ";";

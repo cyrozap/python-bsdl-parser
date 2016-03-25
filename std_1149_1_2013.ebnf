@@ -1,0 +1,93 @@
+(* python-bsdl-parser
+ *
+ * Copyright (c) 2016, Forest Crossman <cyrozap@gmail.com>
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ *)
+
+(* IEEE Std 1149.1-2013, Annex B *)
+
+@@ignorecase :: True
+@@eol_comments :: /--.*?$/
+
+(* B.8.1 *)
+bsdl_description = "entity" component_name "is"
+    generic_parameter
+    logical_port_description
+    standard_use_statement
+    {use_statement}
+    component_conformance_statement
+    device_package_pin_mappings
+    [grouped_port_identification]
+    scan_port_identification
+    [compliance_enable_description]
+    instruction_register_description
+    [optional_register_description]
+    [register_access_description]
+    boundary_scan_register_description
+    [runbist_description]
+    [intest_description]
+    [system_clock_description]
+    {register_mnemonics_description}
+    {register_fields_description}
+    {register_assembly_description}
+    {register_constraints_description}
+    {register_association_description}
+    {power_port_association_description}
+    {bsdl_extensions}
+    [design_warning]
+    "end" component_name semicolon ;
+
+component_name = vhdl_identifier ;
+
+(* B.8.2 *)
+generic_parameter = generic_default | generic_no_default ;
+generic_default = "generic" left_paren "PHYSICAL_PIN_MAP" colon
+    "string" right_paren semicolon ;
+generic_no_default = "generic" left_paren "PHYSICAL_PIN_MAP" colon
+    "string" colon_equal default_device_package_type right_paren semicolon ;
+default_device_package_type = quote pin_mapping_name quote ;
+
+(* B.8.3 *)
+logical_port_description = "port" left_paren pin_spec
+    { semicolon pin_spec } right_paren semicolon ;
+pin_spec = identifier_list colon pin_type port_dimension ;
+identifier_list = port_name { comma port_name} ;
+pin_type = "in" | "out" | "buffer" | "inout" | "LINKAGE_INOUT" |
+    "LINKAGE_BUFFER" | "LINKAGE_IN" | "LINKAGE_OUT" | "LINKAGE_MECHANICAL" |
+    "POWER_0" | "POWER_POS" | "POWER_NEG" | "VREF_IN" | "VREF_OUT" ;
+port_dimension = "bit" | bit_vector_spec ;
+bit_vector_spec  = "bit_vector" left_paren range right_paren ;
+range = up_range | down_range ;
+up_range = integer1 "to" integer2 ;
+down_range = integer2 "downto" integer1 ;
+integer1 = integer ;
+integer2 = integer ;
+
+(* B.8.4 *)
+standard_use_statement = "use" standard_package_name period "all" semicolon ;
+standard_package_name = "STD_1149_1_1990" | "STD_1149_1_1994" |
+    "STD_1149_1_2001" | "STD_1149_1_2013" ;
+
+(* B.8.5 *)
+use_statement = "use" user_package_name period "all" semicolon ;
+user_package_name = vhdl_identifier ;
+
+(* B.8.6 *)
+component_conformance_statement = "attribute" "COMPONENT_CONFORMANCE" "of"
+    component_name colon "entity" "is" conformance_string semicolon ;
+conformance_string = quote conformance_identification quote ;
+conformance_identification = "STD_1149_1_1990" | "STD_1149_1_1993" |
+    "STD_1149_1_2001" | "STD_1149_1_2013" ;
+
+(* B.8.7 *)

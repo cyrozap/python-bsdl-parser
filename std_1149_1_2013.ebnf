@@ -112,8 +112,8 @@ map_string = quote port_map { comma port_map } quote ;
 port_map = port_name colon pin_or_list ;
 pin_or_list = pin_desc | pin_list ;
 pin_list = left_paren pin_desc { comma pin_desc} right_paren ;
-pin_desc = pin_ID | "OPEN" | "TIE0" | "TIE1" ;
-pin_ID = vhdl_identifier | integer ;
+pin_desc = pin_id | "OPEN" | "TIE0" | "TIE1" ;
+pin_id = vhdl_identifier | integer ;
 
 (* B.8.8 *)
 grouped_port_identification = "attribute" "PORT_GROUPING" "of"

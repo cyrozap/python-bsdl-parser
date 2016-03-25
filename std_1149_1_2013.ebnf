@@ -413,6 +413,28 @@ binary_operator = exponentiation | multiplication | division | remainder |
 oper_val = mnemonic_pattern | binary_pattern | hex_pattern | decimal_pattern ;
 mnemonic_pattern = [ [ "PACKAGE" package_hierarchy colon ] mnemonic_group_name ]
     left_brace mnemonic_identifier right_brace ;
+logical_inversion = "!";
+bit_wise_inversion = "~";
+one_hot = "one_hot";
+exponentiation = "**";
+multiplication = "*";
+division = "/";
+remainder = "%";
+addition = "+";
+subtraction = "-";
+left_shift = "<<";
+right_shift = ">>";
+less_than = "<";
+greater_than = ">";
+less_than_or_equal = "<=";
+greater_than_or_equal = ">=";
+equals = "==";
+not_equal = "!=";
+bit_wise_and = "&";
+bit_wise_xor = "^";
+bit_wise_or = "|";
+logical_and = "&&";
+logical_or = "||";
 
 (* B.8.23 *)
 register_association_description = "attribute" "REGISTER_ASSOCIATION"

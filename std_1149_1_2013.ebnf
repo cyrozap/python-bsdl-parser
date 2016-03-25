@@ -429,7 +429,7 @@ greater_than = ">";
 less_than_or_equal = "<=";
 greater_than_or_equal = ">=";
 equals = "==";
-not_equal = "!=";
+not_equals = "!=";
 bit_wise_and = "&";
 bit_wise_xor = "^";
 bit_wise_or = "|";

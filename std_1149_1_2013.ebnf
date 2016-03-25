@@ -245,3 +245,16 @@ bit = "0" | "1" ;
 intest_description = "attribute" "INTEST_EXECUTION" "of" component_name
     colon "entity" "is" quote intest_spec quote semicolon ;
 intest_spec = wait_spec comma pin_state ;
+
+(* B.8.17 *)
+system_clock_description = "attribute" "SYSCLOCK_REQUIREMENTS"
+    "of" entity_target "is" system_clock_description_string semicolon ;
+system_clock_description_string = quote system_clock_requirement
+    { comma system_clock_requirement } quote ;
+system_clock_requirement = left_paren port_ID comma min_freq comma max_freq
+    comma clocked_instructions right_paren ;
+min_freq = real ;
+max_freq = real ;
+clocked_instructions = clocked_instruction { comma clocked_instruction } ;
+clocked_instruction = "RUNBIST" | "INTEST" | "INIT_SETUP" |
+    "INIT_SETUP_CLAMP" | "INIT_RUN" | "ECIDCODE" | "IC_RESET" | vhdl_identifier ;

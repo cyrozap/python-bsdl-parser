@@ -447,3 +447,33 @@ extension_parameter_string = string ;
 
 (* B.8.25 *)
 design_warning = "attribute" "DESIGN_WARNING" "of" target "is" string semicolon ;
+
+(* B.10 *)
+user_package = user_package_stmt user_package_body ;
+user_package_stmt = "package" user_package_name "is"
+    standard_use_statement
+    { deferred_constant }
+    { extension_declaration }
+    "end" user_package_name semicolon ;
+deferred_constant = "constant" cell_name colon "CELL_INFO" semicolon ;
+user_package_body = "package" "body" user_package_name "is"
+    standard_use_statement
+    { use_statement }
+    { cell_description_constant }
+    { register_mnemonics_description }
+    { register_fields_description }
+    { register_assembly_description }
+    { register_constraints_description }
+    { register_association_description }
+    { extension_definition }
+    [ design_warning ]
+    "end" user_package_name semicolon ;
+cell_description_constant = "constant" cell_name colon "CELL_INFO"
+    colon_equal left_paren capture_descriptor_list right_paren semicolon ;
+capture_descriptor_list = capture_descriptor { comma capture_descriptor } ;
+capture_descriptor = left_paren cell_context comma capture_instruction comma
+    data_source right_paren ;
+cell_context = "INPUT" | "OUTPUT2" | "OUTPUT3" | "INTERNAL" | "CONTROL" |
+    "CONTROLR" | "CLOCK" | "BIDIR_IN" | "BIDIR_OUT" | "OBSERVE_ONLY" ;
+capture_instruction = "EXTEST" | "SAMPLE" | "INTEST" ;
+data_source = "PI" | "PO" | "CAP" | "UPD" | "ZERO" | "ONE" | "X" ;

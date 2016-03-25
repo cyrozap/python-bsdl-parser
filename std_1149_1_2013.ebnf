@@ -20,6 +20,16 @@
 @@ignorecase :: True
 @@eol_comments :: /--.*?$/
 
+(* B.6.2 *)
+port_id = port_name | subscripted_port_name ;
+port_name = vhdl_identifier ;
+subscripted_port_name = port_name left_paren subscript right_paren ;
+subscript = integer ;
+instruction_name = "BYPASS" | "CLAMP" | "EXTEST" | "HIGHZ" | "IDCODE" |
+    "INTEST" | "PRELOAD" | "RUNBIST" | "SAMPLE" | "USERCODE" |
+    "ECIDCODE" | "CLAMP_HOLD" | "CLAMP_RELEASE" | "TMP_STATUS" |
+    "IC_RESET" | "INIT_SETUP" | "INIT_SETUP_CLAMP" | "INIT_RUN" | vhdl_identifier ;
+
 (* B.8.1 *)
 bsdl_description = "entity" component_name "is"
     generic_parameter

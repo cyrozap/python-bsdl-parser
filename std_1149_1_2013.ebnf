@@ -301,3 +301,24 @@ bit_list = left_paren [ bit_field { comma bit_field } ] right_paren ;
 bit_field = range | integer ;
 prefix_statement = "PREFIX" integer prefix_name ;
 prefix_name = prefix_identifier | minus_sign ;
+
+(* B.8.20 *)
+value_assignment = value_keyword left_paren assignment right_paren ;
+value_keyword = "CAPTURES" | "DEFAULT" | "SAFE" | "RESETVAL" | user_extension ;
+user_extension = "USER" colon user_keyword ;
+user_keyword = vhdl_identifier ;
+assignment = assignment_value | asterisk | minus_sign ;
+assignment_value = binary_pattern | hex_pattern | decimal_pattern | mnemonic_association ;
+mnemonic_association = [ "PACKAGE" package_hierarchy colon ] mnemonic_group_name
+    left_paren mnemonic_default right_paren ;
+mnemonic_default = mnemonic_identifier | asterisk | minus_sign ;
+type_assignment = "NOPI" | "NOPO" | "NOUPD" | "MON" | "PULSE0" | "PULSE1" |
+    "DELAYPO" | "NORETAIN" | "SHARED" | user_extension ;
+reset_assignment = "PORRESET" | "TRSTRESET" | "TAPRESET" | "CHRESET" |
+    "DOMPOR" | "HIERRESET" | local_reset_assignment ;
+local_reset_assignment = reset_type left_paren reset_ident right_paren ;
+reset_type = "RESETOUT" | "RESETIN" ;
+reset_ident = vhdl_identifier ;
+domain_assignment = association_type left_paren association_name right_paren ;
+association_type = "DOMAIN" | "DOMAIN_EXTERNAL" | "SEGMENT" ;
+association_name = vhdl_identifier ;

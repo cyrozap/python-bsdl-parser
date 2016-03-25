@@ -158,3 +158,12 @@ opcode = pattern ;
 pattern_list_string = quote opcode_list quote ;
 instruction_list_string = quote instruction_list quote ;
 instruction_list = instruction_name { comma instruction_name } ;
+
+(* B.8.12 *)
+optional_register_description = optional_register_stmt [ optional_register_stmt ] ;
+optional_register_stmt = idcode_statement | usercode_statement ;
+idcode_statement = "attribute" "IDCODE_REGISTER" "of" component_name
+    colon "entity" "is" quote thirty_two_bit_pattern_list quote semicolon ;
+usercode_statement = "attribute" "USERCODE_REGISTER" "of" component_name
+    colon "entity" "is" quote thirty_two_bit_pattern_list quote semicolon ;
+thirty_two_bit_pattern_list = thirty_two_bit_pattern { comma thirty_two_bit_pattern } ;

@@ -258,3 +258,18 @@ max_freq = real ;
 clocked_instructions = clocked_instruction { comma clocked_instruction } ;
 clocked_instruction = "RUNBIST" | "INTEST" | "INIT_SETUP" |
     "INIT_SETUP_CLAMP" | "INIT_RUN" | "ECIDCODE" | "IC_RESET" | vhdl_identifier ;
+
+(* B.8.18 *)
+register_mnemonics_description = "attribute" "REGISTER_MNEMONICS" "of"
+    target "is" register_mnemonics_string semicolon ;
+target = entity_target | package_target ;
+entity_target = component_name colon "entity" ;
+package_target = user_package_name colon "package" ;
+register_mnemonics_string =
+    quote mnemonic_definition { comma mnemonic_definition } quote ;
+mnemonic_definition = mnemonic_group_name left_paren mnemonic_list right_paren ;
+mnemonic_group_name = vhdl_identifier ;
+mnemonic_list = mnemonic_assignment { comma mnemonic_assignment } ;
+mnemonic_assignment = mnemonic_identifier
+    left_paren pattern_specification right_paren [ information_tag ] ;
+pattern_specification = binary_pattern | hex_pattern | decimal_pattern | "others" ;

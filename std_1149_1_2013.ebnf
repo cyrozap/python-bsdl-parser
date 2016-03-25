@@ -273,3 +273,31 @@ mnemonic_list = mnemonic_assignment { comma mnemonic_assignment } ;
 mnemonic_assignment = mnemonic_identifier
     left_paren pattern_specification right_paren [ information_tag ] ;
 pattern_specification = binary_pattern | hex_pattern | decimal_pattern | "others" ;
+
+(* B.8.19 *)
+register_fields_description = "attribute" "REGISTER_FIELDS" "of" target "is"
+    register_fields_string semicolon ;
+register_fields_string = quote register_field_list { comma register_field_list } quote ;
+register_field_list = reg_or_seg_name left_bracket reg_or_seg_length right_bracket
+    left_paren register_fields right_paren ;
+reg_or_seg_name = TDR | segment_name ;
+TDR = "BOUNDARY" | "BYPASS" | "DEVICE_ID" | "TMP_STATUS" |
+    "ECID" | "INIT_DATA" | "INIT_STATUS" | "RESET_SELECT" |
+    design_specific_TDR_name ;
+segment_name = vhdl_identifier ;
+design_specific_TDR_name = vhdl_identifier ;
+reg_or_seg_length = integer ;
+register_fields = left_paren register_field_element right_paren
+    { comma left_paren register_field_element right_paren } ;
+register_field_element = register_field | prefix_statement ;
+register_field = extended_field_name field_length is bit_list_and_options ;
+extended_field_name = prefix_string field_name ;
+prefix_string = { prefix_identifier period } ;
+field_name = vhdl_identifier ;
+field_length = left_bracket integer right_bracket ;
+bit_list_and_options = bit_list { field_options } ;
+field_options = type_assignment | value_assignment | reset_assignment ;
+bit_list = left_paren [ bit_field { comma bit_field } ] right_paren ;
+bit_field = range | integer ;
+prefix_statement = "PREFIX" integer prefix_name ;
+prefix_name = prefix_identifier | minus_sign ;

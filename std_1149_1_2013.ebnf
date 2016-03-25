@@ -404,7 +404,7 @@ nested_expr = left_paren check_expression right_paren ;
 unary_expr = logical_inv_expr | bit_wise_inv_expr | one_hot_expr ;
 logical_inv_expr = logical_inversion short_expression ;
 bit_wise_inv_expr = bit_wise_inversion short_expression ;
-one_hot_expr = one_hot nested_expression ;
+one_hot_expr = one_hot nested_expr ;
 binary_expr = short_expression binary_operator check_expression ;
 binary_operator = exponentiation | multiplication | division | remainder |
     addition | subtraction | right_shift | left_shift | less_than | greater_than |

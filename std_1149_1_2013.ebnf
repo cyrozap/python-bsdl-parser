@@ -322,3 +322,57 @@ reset_ident = vhdl_identifier ;
 domain_assignment = association_type left_paren association_name right_paren ;
 association_type = "DOMAIN" | "DOMAIN_EXTERNAL" | "SEGMENT" ;
 association_name = vhdl_identifier ;
+
+(* B.8.21 *)
+register_assembly_description = "attribute" "REGISTER_ASSEMBLY" "of" target "is"
+    register_assembly_string semicolon ;
+register_assembly_string = quote register_assembly_list
+    { comma register_assembly_list } quote ;
+register_assembly_list = reg_or_seg_name left_paren register_assembly_elements right_paren ;
+register_assembly_elements = left_paren register_element right_paren
+    { comma left_paren register_element right_paren } ;
+register_element = instance_and_options | field_and_options | instance_reference |
+    selected_segment_element | boundary_instance | using_statement ;
+instance_and_options = instance_definition { field_assignments } ;
+instance_definition = instance_ident "is" [ "PACKAGE" package_hierarchy colon ]
+    reg_or_seg_name ;
+instance_ident = segment_ident | array_ident ;
+segment_ident = vhdl_identifier ;
+array_ident = "ARRAY" array_segment_ident left_paren range right_paren ;
+array_segment_ident = vhdl_identifier ;
+field_assignments = field_value_assignment | field_reset_assignment |
+    field_domain_assignment | field_selection_assignment ;
+field_value_assignment = [ field_ident colon ] value_assignment ;
+field_reset_assignment = [ field_ident colon ] reset_assignment ;
+field_domain_assignment = [ field_ident colon ] domain_assignment ;
+field_ident = { instance_name period } field_name ;
+instance_name = segment_ident | array_instances ;
+array_instances = array_segment_ident bit_list ;
+field_and_options = field_name field_length { field_options } ;
+instance_reference = segment_ident | array_instance ;
+array_instance = array_segment_ident left_paren index right_paren ;
+index = integer ;
+selected_segment_element = "SELECTMUX"
+    left_paren selectable_segment right_paren
+    { comma left_paren selectable_segment right_paren }
+    field_selection_assignment ;
+selectable_segment = instance_and_options | instance_reference ;
+field_selection_assignment = selection_field selection_values
+    [ broadcast_field broadcast_values ] ;
+selection_field = "SELECTFIELD" left_paren field_reference right_paren ;
+field_reference = { instance_reference period } field_name ;
+selection_values = "SELECTVALUES" left_paren segment_selection
+    { segment_selection } right_paren ;
+segment_selection = left_paren instance_reference colon field_value
+    { comma field_value } right_paren ;
+field_value = mnemonic_identifier | binary_pattern | hex_pattern | decimal_pattern ;
+broadcast_field = "BROADCASTFIELD" left_paren field_reference right_paren ;
+broadcast_values = "BROADCASTVALUES" left_paren broadcast_selection
+    { broadcast_selection } right_paren ;
+broadcast_selection = left_paren instance_reference { comma instance_reference }
+    colon field_value { comma field_value } right_paren ;
+boundary_instance = segment_ident "is"
+    [ "PACKAGE" package_hierarchy colon ] boundary_segment_name ;
+using_statement = "USING" package_prefix ;
+package_prefix = package_hierarchy | minus_sign ;
+package_hierarchy = user_package_name { period user_package_name } ;

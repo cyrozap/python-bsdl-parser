@@ -116,3 +116,15 @@ twin_group_list = twin_group { comma twin_group } ;
 twin_group = left_paren representative_port comma associated_port right_paren ;
 representative_port = port_ID ;
 associated_port = port_ID ;
+
+(* B.8.9 *)
+scan_port_identification = scan_port_stmt { scan_port_stmt } ;
+scan_port_stmt = TCK_stmt | TDI_stmt | TMS_stmt | TDO_stmt | TRST_stmt ;
+TCK_stmt = "attribute" "TAP_SCAN_CLOCK" "of" port_ID colon "signal" "is"
+    left_paren clock_record right_paren semicolon ;
+TDI_stmt = "attribute" "TAP_SCAN_IN" "of" port_ID colon "signal" "is" "true" semicolon ;
+TMS_stmt = "attribute" "TAP_SCAN_MODE" "of" port_ID colon "signal" "is" "true" semicolon ;
+TDO_stmt = "attribute" "TAP_SCAN_OUT" "of" port_ID colon "signal" "is" "true" semicolon ;
+TRST_stmt = "attribute" "TAP_SCAN_RESET" "of" port_ID colon "signal" "is" "true" semicolon ;
+clock_record = real comma halt_state_value ;
+halt_state_value = "LOW" | "BOTH" ;

@@ -181,3 +181,46 @@ std_var_register = std_var_reg_name [ left_bracket reg_length right_bracket ] ;
 std_var_reg_name = "ECID" | "INIT_DATA" | "INIT_STATUS" | "RESET_SELECT" ;
 design_specific_register = vhdl_identifier [ left_bracket reg_length right_bracket ] ;
 reg_length = integer | asterisk ;
+
+(* B.8.14 *)
+boundary_scan_register_description = fixed_boundary_stmts | segment_boundary_stmts ;
+fixed_boundary_stmts = boundary_length_stmt boundary_register_stmt ;
+segment_boundary_stmts = assembled_boundary_length_stmt boundary_register_segments ;
+boundary_length_stmt = "attribute" "BOUNDARY_LENGTH" "of"
+    component_name colon "entity" "is" register_length semicolon ;
+register_length = integer ;
+boundary_register_stmt = "attribute" "BOUNDARY_REGISTER" "of"
+    component_name colon "entity" "is" cell_table_string semicolon ;
+cell_table_string = quote cell_table quote ;
+assembled_boundary_length_stmt = "attribute" "ASSEMBLED_BOUNDARY_LENGTH" "of"
+    component_name colon "entity" "is"
+    left_paren reset_length comma register_length right_paren semicolon ;
+reset_length = integer ;
+boundary_register_segments = boundary_register_segment { boundary_register_segment } ;
+boundary_register_segment = "attribute" "BOUNDARY_SEGMENT" "of"
+    component_name colon "entity" "is" boundary_segment_string semicolon ;
+boundary_segment_string = quote boundary_segment_list
+    { comma boundary_segment_list } quote ;
+boundary_segment_list = boundary_segment_name
+    left_bracket boundary_segment_length right_bracket
+    left_paren cell_table right_paren ;
+boundary_segment_name = vhdl_identifier ;
+boundary_segment_length = integer ;
+cell_table = cell_entry { comma cell_entry } ;
+cell_entry = cell_number left_paren cell_info right_paren ;
+cell_number = integer ;
+cell_info = cell_spec [ comma input_or_disable_spec ] ;
+cell_spec = cell_name comma port_ID_or_null comma function comma safe_bit ;
+cell_name = vhdl_identifier ;
+port_ID_or_null = port_ID | asterisk ;
+function = "INPUT" | "OUTPUT2" | "OUTPUT3" | "CONTROL" |
+    "CONTROLR" | "INTERNAL" | "CLOCK" | "BIDIR" | "OBSERVE_ONLY" ;
+safe_bit = "0" | "1" | "X" ;
+input_or_disable_spec = input_spec | disable_spec ;
+input_spec = "EXTERN0" | "EXTERN1" | "PULL0" | "PULL1" | "OPEN0" |
+    "OPEN1" | "KEEPER" | "OPENX" | "EXPECT1" | "EXPECT0" ;
+disable_spec = ccell comma disable_value comma disable_result ;
+ccell = integer ;
+disable_value = "0" | "1" ;
+disable_result = "WEAK0" | "WEAK1" | "PULL0" | "PULL1" | "OPEN0" | "OPEN1" |
+    "KEEPER" | "Z" ;

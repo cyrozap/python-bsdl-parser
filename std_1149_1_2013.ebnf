@@ -280,12 +280,12 @@ register_fields_description = "attribute" "REGISTER_FIELDS" "of" target "is"
 register_fields_string = quote register_field_list { comma register_field_list } quote ;
 register_field_list = reg_or_seg_name left_bracket reg_or_seg_length right_bracket
     left_paren register_fields right_paren ;
-reg_or_seg_name = TDR | segment_name ;
-TDR = "BOUNDARY" | "BYPASS" | "DEVICE_ID" | "TMP_STATUS" |
+reg_or_seg_name = tdr | segment_name ;
+tdr = "BOUNDARY" | "BYPASS" | "DEVICE_ID" | "TMP_STATUS" |
     "ECID" | "INIT_DATA" | "INIT_STATUS" | "RESET_SELECT" |
-    design_specific_TDR_name ;
+    design_specific_tdr_name ;
 segment_name = vhdl_identifier ;
-design_specific_TDR_name = vhdl_identifier ;
+design_specific_tdr_name = vhdl_identifier ;
 reg_or_seg_length = integer ;
 register_fields = left_paren register_field_element right_paren
     { comma left_paren register_field_element right_paren } ;
@@ -411,7 +411,7 @@ register_association_string = quote register_association_list
     { comma register_association_list } quote;
 register_association_list = reg_field_or_instance colon association_list { association_list } ;
 reg_field_or_instance = field_or_instance_name [ left_paren index right_paren ] ;
-field_or_instance_name = extended_field_name | segment_ident | array_segment_ident | TDR ;
+field_or_instance_name = extended_field_name | segment_ident | array_segment_ident | tdr ;
 association_list = port_list | info_list | clock_list | user_list | unit ;
 port_list = "port" port_association_list ;
 port_association_list = left_paren port_id { comma port_id } right_paren ;

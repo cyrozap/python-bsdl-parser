@@ -91,3 +91,16 @@ conformance_identification = "STD_1149_1_1990" | "STD_1149_1_1993" |
     "STD_1149_1_2001" | "STD_1149_1_2013" ;
 
 (* B.8.7 *)
+device_package_pin_mappings = pin_map_statement pin_mappings ;
+pin_map_statement = "attribute" "PIN_MAP" "of" component_name colon "entity" "is"
+    "PHYSICAL_PIN_MAP" semicolon ;
+pin_mappings = pin_mapping { pin_mapping } ;
+pin_mapping = "constant" pin_mapping_name colon "PIN_MAP_STRING" ":="
+    map_string semicolon ;
+pin_mapping_name = vhdl_identifier ;
+map_string = quote port_map { comma port_map } quote ;
+port_map = port_name colon pin_or_list ;
+pin_or_list = pin_desc | pin_list ;
+pin_list = left_paren pin_desc { comma pin_desc} right_paren ;
+pin_desc = pin_ID | "OPEN" | "TIE0" | "TIE1" ;
+pin_ID = vhdl_identifier | integer ;

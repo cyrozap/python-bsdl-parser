@@ -136,3 +136,25 @@ compliance_pattern_string = quote left_paren compliance_port_list right_paren
     left_paren pattern_list right_paren quote ;
 compliance_port_list = port_ID { comma port_ID } ;
 pattern_list = pattern { comma pattern } ;
+
+(* B.8.11 *)
+instruction_register_description =
+    instruction_length_stmt
+    instruction_opcode_stmt
+    instruction_capture_stmt
+    [instruction_private_stmt] ;
+instruction_length_stmt = "attribute" "INSTRUCTION_LENGTH" "of" component_name
+    colon "entity" "is" integer semicolon ;
+instruction_opcode_stmt = "attribute" "INSTRUCTION_OPCODE" "of" component_name
+    colon "entity" "is" opcode_table_string semicolon ;
+instruction_capture_stmt = "attribute" "INSTRUCTION_CAPTURE" "of" component_name
+    colon "entity" "is" pattern_list_string semicolon ;
+instruction_private_stmt = "attribute" "INSTRUCTION_PRIVATE" "of" component_name
+    colon "entity" "is" instruction_list_string semicolon ;
+opcode_table_string = quote opcode_description { comma opcode_description } quote ;
+opcode_description = instruction_name left_paren opcode_list right_paren ;
+opcode_list = opcode { comma opcode } ;
+opcode = pattern ;
+pattern_list_string = quote opcode_list quote ;
+instruction_list_string = quote instruction_list quote ;
+instruction_list = instruction_name { comma instruction_name } ;

@@ -224,3 +224,19 @@ ccell = integer ;
 disable_value = "0" | "1" ;
 disable_result = "WEAK0" | "WEAK1" | "PULL0" | "PULL1" | "OPEN0" | "OPEN1" |
     "KEEPER" | "Z" ;
+
+(* B.8.15 *)
+runbist_description = "attribute" "RUNBIST_EXECUTION" "of" component_name
+    colon "entity" "is" quote runbist_spec quote semicolon ;
+runbist_spec = wait_spec comma pin_state comma signature_spec ;
+wait_spec = "WAIT_DURATION" left_paren duration_spec right_paren ;
+duration_spec = clock_cycles_list | time_and_clocks ;
+time_and_clocks = time [ comma clock_cycles_list ] ;
+clock_cycles_list = clock_cycles { comma clock_cycles } ;
+time = real ;
+clock_cycles = port_ID integer ;
+pin_state = "OBSERVING" condition "AT_PINS" ;
+condition = "HIGHZ" | "BOUNDARY" ;
+signature_spec = "EXPECT_DATA" det_pattern ;
+det_pattern = bit { bit } ;
+bit = "0" | "1" ;

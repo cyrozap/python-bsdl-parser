@@ -434,3 +434,13 @@ power_port_association_string = quote power_port_association_list
     { comma power_port_association_list } quote ;
 power_port_association_list = power_port_id colon port_association_list ;
 power_port_id = port_ID ;
+
+(* B.8.24 *)
+bsdl_extensions = extension_declaration | extension_definition ;
+extension_declaration = "attribute" extension_name colon "BSDL_EXTENSION" semicolon ;
+extension_definition = "attribute" extension_name "of" target
+    "is" extension_parameter_string semicolon ;
+extension_name = entity_defined_name | bsdl_package_defined_name ;
+entity_defined_name = vhdl_identifier ;
+bsdl_package_defined_name = vhdl_identifier ;
+extension_parameter_string = string ;

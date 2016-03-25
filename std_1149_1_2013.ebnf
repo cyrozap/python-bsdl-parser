@@ -240,3 +240,8 @@ condition = "HIGHZ" | "BOUNDARY" ;
 signature_spec = "EXPECT_DATA" det_pattern ;
 det_pattern = bit { bit } ;
 bit = "0" | "1" ;
+
+(* B.8.16 *)
+intest_description = "attribute" "INTEST_EXECUTION" "of" component_name
+    colon "entity" "is" quote intest_spec quote semicolon ;
+intest_spec = wait_spec comma pin_state ;

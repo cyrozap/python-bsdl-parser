@@ -444,3 +444,6 @@ extension_name = entity_defined_name | bsdl_package_defined_name ;
 entity_defined_name = vhdl_identifier ;
 bsdl_package_defined_name = vhdl_identifier ;
 extension_parameter_string = string ;
+
+(* B.8.25 *)
+design_warning = "attribute" "DESIGN_WARNING" "of" target "is" string semicolon ;

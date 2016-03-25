@@ -179,5 +179,5 @@ register = std_fixed_register | std_var_register | design_specific_register ;
 std_fixed_register = "BOUNDARY" | "BYPASS" | "DEVICE_ID" | "TMP_STATUS" ;
 std_var_register = std_var_reg_name [ left_bracket reg_length right_bracket ] ;
 std_var_reg_name = "ECID" | "INIT_DATA" | "INIT_STATUS" | "RESET_SELECT" ;
-design_specific_register = VHDL_identifier [ left_bracket reg_length right_bracket ] ;
+design_specific_register = vhdl_identifier [ left_bracket reg_length right_bracket ] ;
 reg_length = integer | asterisk ;

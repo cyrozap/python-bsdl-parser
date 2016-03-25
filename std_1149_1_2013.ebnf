@@ -167,3 +167,17 @@ idcode_statement = "attribute" "IDCODE_REGISTER" "of" component_name
 usercode_statement = "attribute" "USERCODE_REGISTER" "of" component_name
     colon "entity" "is" quote thirty_two_bit_pattern_list quote semicolon ;
 thirty_two_bit_pattern_list = thirty_two_bit_pattern { comma thirty_two_bit_pattern } ;
+
+(* B.8.13 *)
+register_access_description = "attribute" "REGISTER_ACCESS" "of"
+    component_name colon "entity" "is" register_access_string semicolon ;
+register_access_string = quote register_association { comma register_association } quote ;
+register_association = register left_paren instruction_capture_list right_paren ;
+instruction_capture_list = instruction_capture { comma instruction_capture } ;
+instruction_capture = instruction_name [ "CAPTURES" pattern ] ;
+register = std_fixed_register | std_var_register | design_specific_register ;
+std_fixed_register = "BOUNDARY" | "BYPASS" | "DEVICE_ID" | "TMP_STATUS" ;
+std_var_register = std_var_reg_name [ left_bracket reg_length right_bracket ] ;
+std_var_reg_name = "ECID" | "INIT_DATA" | "INIT_STATUS" | "RESET_SELECT" ;
+design_specific_register = VHDL_identifier [ left_bracket reg_length right_bracket ] ;
+reg_length = integer | asterisk ;

@@ -403,3 +403,34 @@ binary_operator = exponentiation | multiplication | division | remainder |
 oper_val = mnemonic_pattern | binary_pattern | hex_pattern | decimal_pattern ;
 mnemonic_pattern = [ [ "PACKAGE" package_hierarchy colon ] mnemonic_group_name ]
     left_brace mnemonic_identifier right_brace ;
+
+(* B.8.23 *)
+register_association_description = "attribute" "REGISTER_ASSOCIATION"
+    "of" target "is" register_association_string semicolon ;
+register_association_string = quote register_association_list
+    { comma register_association_list } quote;
+register_association_list = reg_field_or_instance colon association_list { association_list } ;
+reg_field_or_instance = field_or_instance_name [ left_paren index right_paren ] ;
+field_or_instance_name = extended_field_name | segment_ident | array_segment_ident | TDR ;
+association_list = port_list | info_list | clock_list | user_list | unit ;
+port_list = "port" port_association_list ;
+port_association_list = left_paren port_ID { comma port_ID } right_paren ;
+info_list = "info" left_paren information_tag { comma information_tag } right_paren ;
+clock_list = "sysclock" left_paren port_ID { comma port_ID } right_paren ;
+user_list = "user" user_list_name left_paren single_or_multi_list right_paren ;
+user_list_name = vhdl_identifier ;
+single_or_multi_list = single_word_user_list | multi_word_user_list ;
+single_word_user_list = vhdl_identifier { comma vhdl_identifier } ;
+multi_word_user_list = information_tag { comma information_tag } ;
+unit = "unit" left_paren unit_name unit_definition right_paren ;
+unit_definition = left_brace unit_value [ unit_scale ] [ unit_link ] right_brace ;
+unit_name = vhdl_identifier ;
+unit_value = hex_pattern ;
+unit_scale = real ;
+unit_link = information_tag ;
+power_port_association_description = "attribute" "POWER_PORT_ASSOCIATION"
+    "of" entity_target "is" power_port_association_string semicolon ;
+power_port_association_string = quote power_port_association_list
+    { comma power_port_association_list } quote ;
+power_port_association_list = power_port_id colon port_association_list ;
+power_port_id = port_ID ;

@@ -300,7 +300,7 @@ reg_or_seg_length = integer ;
 register_fields = left_paren register_field_element right_paren
     { comma left_paren register_field_element right_paren } ;
 register_field_element = register_field | prefix_statement ;
-register_field = extended_field_name field_length is bit_list_and_options ;
+register_field = extended_field_name field_length "is" bit_list_and_options ;
 extended_field_name = prefix_string field_name ;
 prefix_string = { prefix_identifier period } ;
 field_name = vhdl_identifier ;

@@ -114,18 +114,18 @@ twin_group_entry = twin_group_type left_paren twin_group_list right_paren ;
 twin_group_type = "DIFFERENTIAL_VOLTAGE" | "DIFFERENTIAL_CURRENT" ;
 twin_group_list = twin_group { comma twin_group } ;
 twin_group = left_paren representative_port comma associated_port right_paren ;
-representative_port = port_ID ;
-associated_port = port_ID ;
+representative_port = port_id ;
+associated_port = port_id ;
 
 (* B.8.9 *)
 scan_port_identification = scan_port_stmt { scan_port_stmt } ;
 scan_port_stmt = TCK_stmt | TDI_stmt | TMS_stmt | TDO_stmt | TRST_stmt ;
-TCK_stmt = "attribute" "TAP_SCAN_CLOCK" "of" port_ID colon "signal" "is"
+TCK_stmt = "attribute" "TAP_SCAN_CLOCK" "of" port_id colon "signal" "is"
     left_paren clock_record right_paren semicolon ;
-TDI_stmt = "attribute" "TAP_SCAN_IN" "of" port_ID colon "signal" "is" "true" semicolon ;
-TMS_stmt = "attribute" "TAP_SCAN_MODE" "of" port_ID colon "signal" "is" "true" semicolon ;
-TDO_stmt = "attribute" "TAP_SCAN_OUT" "of" port_ID colon "signal" "is" "true" semicolon ;
-TRST_stmt = "attribute" "TAP_SCAN_RESET" "of" port_ID colon "signal" "is" "true" semicolon ;
+TDI_stmt = "attribute" "TAP_SCAN_IN" "of" port_id colon "signal" "is" "true" semicolon ;
+TMS_stmt = "attribute" "TAP_SCAN_MODE" "of" port_id colon "signal" "is" "true" semicolon ;
+TDO_stmt = "attribute" "TAP_SCAN_OUT" "of" port_id colon "signal" "is" "true" semicolon ;
+TRST_stmt = "attribute" "TAP_SCAN_RESET" "of" port_id colon "signal" "is" "true" semicolon ;
 clock_record = real comma halt_state_value ;
 halt_state_value = "LOW" | "BOTH" ;
 
@@ -134,7 +134,7 @@ compliance_enable_description = "attribute" "COMPLIANCE_PATTERNS" "of"
     component_name colon "entity" "is" compliance_pattern_string semicolon ;
 compliance_pattern_string = quote left_paren compliance_port_list right_paren
     left_paren pattern_list right_paren quote ;
-compliance_port_list = port_ID { comma port_ID } ;
+compliance_port_list = port_id { comma port_id } ;
 pattern_list = pattern { comma pattern } ;
 
 (* B.8.11 *)
@@ -210,9 +210,9 @@ cell_table = cell_entry { comma cell_entry } ;
 cell_entry = cell_number left_paren cell_info right_paren ;
 cell_number = integer ;
 cell_info = cell_spec [ comma input_or_disable_spec ] ;
-cell_spec = cell_name comma port_ID_or_null comma function comma safe_bit ;
+cell_spec = cell_name comma port_id_or_null comma function comma safe_bit ;
 cell_name = vhdl_identifier ;
-port_ID_or_null = port_ID | asterisk ;
+port_id_or_null = port_id | asterisk ;
 function = "INPUT" | "OUTPUT2" | "OUTPUT3" | "CONTROL" |
     "CONTROLR" | "INTERNAL" | "CLOCK" | "BIDIR" | "OBSERVE_ONLY" ;
 safe_bit = "0" | "1" | "X" ;
@@ -234,7 +234,7 @@ duration_spec = clock_cycles_list | time_and_clocks ;
 time_and_clocks = time [ comma clock_cycles_list ] ;
 clock_cycles_list = clock_cycles { comma clock_cycles } ;
 time = real ;
-clock_cycles = port_ID integer ;
+clock_cycles = port_id integer ;
 pin_state = "OBSERVING" condition "AT_PINS" ;
 condition = "HIGHZ" | "BOUNDARY" ;
 signature_spec = "EXPECT_DATA" det_pattern ;
@@ -251,7 +251,7 @@ system_clock_description = "attribute" "SYSCLOCK_REQUIREMENTS"
     "of" entity_target "is" system_clock_description_string semicolon ;
 system_clock_description_string = quote system_clock_requirement
     { comma system_clock_requirement } quote ;
-system_clock_requirement = left_paren port_ID comma min_freq comma max_freq
+system_clock_requirement = left_paren port_id comma min_freq comma max_freq
     comma clocked_instructions right_paren ;
 min_freq = real ;
 max_freq = real ;
@@ -414,9 +414,9 @@ reg_field_or_instance = field_or_instance_name [ left_paren index right_paren ] 
 field_or_instance_name = extended_field_name | segment_ident | array_segment_ident | TDR ;
 association_list = port_list | info_list | clock_list | user_list | unit ;
 port_list = "port" port_association_list ;
-port_association_list = left_paren port_ID { comma port_ID } right_paren ;
+port_association_list = left_paren port_id { comma port_id } right_paren ;
 info_list = "info" left_paren information_tag { comma information_tag } right_paren ;
-clock_list = "sysclock" left_paren port_ID { comma port_ID } right_paren ;
+clock_list = "sysclock" left_paren port_id { comma port_id } right_paren ;
 user_list = "user" user_list_name left_paren single_or_multi_list right_paren ;
 user_list_name = vhdl_identifier ;
 single_or_multi_list = single_word_user_list | multi_word_user_list ;
@@ -433,7 +433,7 @@ power_port_association_description = "attribute" "POWER_PORT_ASSOCIATION"
 power_port_association_string = quote power_port_association_list
     { comma power_port_association_list } quote ;
 power_port_association_list = power_port_id colon port_association_list ;
-power_port_id = port_ID ;
+power_port_id = port_id ;
 
 (* B.8.24 *)
 bsdl_extensions = extension_declaration | extension_definition ;

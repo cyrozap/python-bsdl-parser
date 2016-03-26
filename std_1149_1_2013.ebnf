@@ -27,11 +27,11 @@ digit = /[0-9]/ ;
 (* B.5.4 *)
 vhdl_identifier = /[a-zA-Z][0-9a-zA-Z_]*/ ;
 mnemonic_identifier = /[A-Za-z0-9\@\*\_\-\+\|\%\~\.]*[A-Za-z]+[A-Za-z0-9\@\*\_\-\+\|\%\~\.]*/ ;
-prefix_identifier = letters | letters { letters | digit | "_" }+ ;
+prefix_identifier = /[a-zA-Z][a-zA-Z0-9_]*/ ;
 
 (* B.5.5 *)
-integer = { digit }+ ;
-real = integer "." integer /[Ee]/ integer | integer "." integer;
+integer = /[0-9]+/;
+real = /[0-9]+\.[0-9]+([Ee][+-]?)?[0-9]*/ ;
 pattern = /[01Xx]+/ ;
 thirty_two_bit_pattern = /[01Xx]{32}/ ;
 binary_pattern = /0[bB][01xX][01xX_]*/ ;
@@ -39,10 +39,10 @@ hex_pattern = /0[xX][0-9a-fA-FxX][0-9a-fA-FxX_]*/ ;
 decimal_pattern = /[0-9]/ | /[1-9][0-9]+/ ;
 
 (* B.5.6 *)
-string = '"' { letters | digit | "&" | "'" | "(" | ")" | "[" | "]" | "*" | "," | "-" | "+" | "." | ":" | ";" | "<" | "=" | ">" | "_" }+ '"' ;
+string = /"[A-Za-z0-9\&'\(\)\[\]\*\,\-\+\.\:\;\<\=\>\_]+"/ ;
 
 (* B.5.7 *)
-information_tag = "<" { letters | digit | "&" | "'" | "(" | ")" | "[" | "]" | "*" | "," | "-" | "+" | "." | ":" | ";" | "=" | "_" }+ ">" ;
+information_tag = /<[A-Za-z0-9\&'\(\)\[\]\*\,\-\+\.\:\;\=\_]+>/ ;
 
 (* B.6.2 *)
 port_id = subscripted_port_name | port_name ;

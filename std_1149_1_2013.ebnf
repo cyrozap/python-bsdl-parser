@@ -20,6 +20,30 @@
 @@ignorecase :: True
 @@eol_comments :: /--.*?$/
 
+(* B.5.1 *)
+letters = /[A-Za-z]/ ;
+digit = /[0-9]/ ;
+
+(* B.5.4 *)
+vhdl_identifier = /[a-zA-Z][0-9a-zA-Z_]*/ ;
+mnemonic_identifier = /[A-Za-z0-9\@\*\_\-\+\|\%\~\.]*[A-Za-z]+[A-Za-z0-9\@\*\_\-\+\|\%\~\.]*/ ;
+prefix_identifier = letters | letters { letters | digit | "_" }+ ;
+
+(* B.5.5 *)
+integer = { digit }+ ;
+real = integer "." integer /[Ee]/ integer | integer "." integer;
+pattern = /[01Xx]+/ ;
+thirty_two_bit_pattern = /[01Xx]{32}/ ;
+binary_pattern = /0[bB][01xX][01xX_]*/ ;
+hex_pattern = /0[xX][0-9a-fA-FxX][0-9a-fA-FxX_]*/ ;
+decimal_pattern = /[0-9]/ | /[1-9][0-9]+/ ;
+
+(* B.5.6 *)
+string = '"' { letters | digit | "&" | "'" | "(" | ")" | "[" | "]" | "*" | "," | "-" | "+" | "." | ":" | ";" | "<" | "=" | ">" | "_" }+ '"' ;
+
+(* B.5.7 *)
+information_tag = "<" { letters | digit | "&" | "'" | "(" | ")" | "[" | "]" | "*" | "," | "-" | "+" | "." | ":" | ";" | "=" | "_" }+ ">" ;
+
 (* B.6.2 *)
 port_id = subscripted_port_name | port_name ;
 port_name = vhdl_identifier ;

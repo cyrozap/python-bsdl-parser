@@ -129,13 +129,13 @@ associated_port = port_id ;
 
 (* B.8.9 *)
 scan_port_identification = scan_port_stmt { scan_port_stmt } ;
-scan_port_stmt = TCK_stmt | TDI_stmt | TMS_stmt | TDO_stmt | TRST_stmt ;
-TCK_stmt = "attribute" "TAP_SCAN_CLOCK" "of" port_id colon "signal" "is"
+scan_port_stmt = tck_stmt | tdi_stmt | tms_stmt | tdo_stmt | trst_stmt ;
+tck_stmt = "attribute" "TAP_SCAN_CLOCK" "of" port_id colon "signal" "is"
     left_paren clock_record right_paren semicolon ;
-TDI_stmt = "attribute" "TAP_SCAN_IN" "of" port_id colon "signal" "is" "true" semicolon ;
-TMS_stmt = "attribute" "TAP_SCAN_MODE" "of" port_id colon "signal" "is" "true" semicolon ;
-TDO_stmt = "attribute" "TAP_SCAN_OUT" "of" port_id colon "signal" "is" "true" semicolon ;
-TRST_stmt = "attribute" "TAP_SCAN_RESET" "of" port_id colon "signal" "is" "true" semicolon ;
+tdi_stmt = "attribute" "TAP_SCAN_IN" "of" port_id colon "signal" "is" "true" semicolon ;
+tms_stmt = "attribute" "TAP_SCAN_MODE" "of" port_id colon "signal" "is" "true" semicolon ;
+tdo_stmt = "attribute" "TAP_SCAN_OUT" "of" port_id colon "signal" "is" "true" semicolon ;
+trst_stmt = "attribute" "TAP_SCAN_RESET" "of" port_id colon "signal" "is" "true" semicolon ;
 clock_record = real comma halt_state_value ;
 halt_state_value = "LOW" | "BOTH" ;
 

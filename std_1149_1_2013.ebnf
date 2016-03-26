@@ -21,7 +21,7 @@
 @@eol_comments :: /--.*?$/
 
 (* B.6.2 *)
-port_id = port_name | subscripted_port_name ;
+port_id = subscripted_port_name | port_name ;
 port_name = vhdl_identifier ;
 subscripted_port_name = port_name left_paren subscript right_paren ;
 subscript = integer ;
@@ -76,7 +76,7 @@ identifier_list = port_name { comma port_name} ;
 pin_type = "in" | "out" | "buffer" | "inout" | "LINKAGE_INOUT" |
     "LINKAGE_BUFFER" | "LINKAGE_IN" | "LINKAGE_OUT" | "LINKAGE_MECHANICAL" |
     "POWER_0" | "POWER_POS" | "POWER_NEG" | "VREF_IN" | "VREF_OUT" ;
-port_dimension = "bit" | bit_vector_spec ;
+port_dimension = bit_vector_spec | "bit" ;
 bit_vector_spec  = "bit_vector" left_paren range right_paren ;
 range = up_range | down_range ;
 up_range = integer1 "to" integer2 ;
@@ -112,8 +112,8 @@ map_string = quote port_map { comma port_map } quote ;
 port_map = port_name colon pin_or_list ;
 pin_or_list = pin_desc | pin_list ;
 pin_list = left_paren pin_desc { comma pin_desc} right_paren ;
-pin_desc = pin_id | "OPEN" | "TIE0" | "TIE1" ;
-pin_id = vhdl_identifier | integer ;
+pin_desc = "OPEN" | "TIE0" | "TIE1" | pin_id ;
+pin_id = integer | vhdl_identifier ;
 
 (* B.8.8 *)
 grouped_port_identification = "attribute" "PORT_GROUPING" "of"

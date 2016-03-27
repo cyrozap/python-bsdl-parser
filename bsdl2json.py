@@ -21,19 +21,19 @@
 import json
 import sys
 
-import std_1149_1_2013
+import bsdl
 
 
 class BsdlSemantics:
     def map_string(self, ast):
-        parser = std_1149_1_2013.std_1149_1_2013Parser()
+        parser = bsdl.bsdlParser()
         ast = parser.parse(''.join(ast), "port_map")
         return ast
 
 def main(filename):
     with open(filename) as f:
         text = f.read()
-        parser = std_1149_1_2013.std_1149_1_2013Parser()
+        parser = bsdl.bsdlParser()
         ast = parser.parse(text, "bsdl_description", semantics=BsdlSemantics())
         print(json.dumps(ast))
 

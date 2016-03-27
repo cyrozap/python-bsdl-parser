@@ -39,7 +39,7 @@ hex_pattern = /0[xX][0-9a-fA-FxX][0-9a-fA-FxX_]*/ ;
 decimal_pattern = /[0-9]/ | /[1-9][0-9]+/ ;
 
 (* B.5.6 *)
-string = quote @:?/[A-Za-z0-9\&'\(\)\[\]\*\,\-\+\.\:\;\<\=\>\_\/\t ]+/? quote ;
+string = "&".{[quote @:?/[A-Za-z0-9\&'\(\)\[\]\*\,\-\+\.\:\;\<\=\>\_\/\t ]+/? quote]} ;
 
 (* B.5.7 *)
 information_tag = /<[A-Za-z0-9\&'\(\)\[\]\*\,\-\+\.\:\;\=\_]+>/ ;
@@ -132,7 +132,7 @@ pin_mappings = { pin_mapping }+ ;
 pin_mapping = "constant" pin_mapping_name:pin_mapping_name colon "PIN_MAP_STRING" ":="
     pin_map:map_string semicolon ;
 pin_mapping_name = vhdl_identifier ;
-map_string = "&".{[string]} ;
+map_string = string ;
 port_map = (comma).{[port]} ;
 port = port_name:port_name colon pin_list:pin_or_list ;
 pin_or_list = @+:pin_desc | @:pin_list ;
@@ -143,7 +143,7 @@ pin_id = integer | vhdl_identifier ;
 (* B.8.8 *)
 grouped_port_identification = "attribute" "PORT_GROUPING" "of"
     component_name colon "entity" "is" @:group_table_string semicolon ;
-group_table_string = "&".{[string]} ;
+group_table_string = string ;
 group_table = (comma).{[twin_group_entry]} ;
 twin_group_entry = twin_group_type:twin_group_type left_paren twin_group_list:twin_group_list right_paren ;
 twin_group_type = "DIFFERENTIAL_VOLTAGE" | "DIFFERENTIAL_CURRENT" ;
@@ -488,10 +488,10 @@ extension_definition = "attribute" extension_name:extension_name "of" target
 extension_name = entity_defined_name | bsdl_package_defined_name ;
 entity_defined_name = vhdl_identifier ;
 bsdl_package_defined_name = vhdl_identifier ;
-extension_parameter_string = "&".{[string]} ;
+extension_parameter_string = string ;
 
 (* B.8.25 *)
-design_warning = "attribute" "DESIGN_WARNING" "of" target "is" "&".{[@:string]} semicolon ;
+design_warning = "attribute" "DESIGN_WARNING" "of" target "is" @:string semicolon ;
 
 (* B.10 *)
 user_package = user_package_stmt user_package_body ;

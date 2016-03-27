@@ -30,6 +30,11 @@ class BsdlSemantics:
         ast = parser.parse(''.join(ast), "port_map")
         return ast
 
+    def grouped_port_identification(self, ast):
+        parser = bsdl.bsdlParser()
+        ast = parser.parse(''.join(ast), "group_table")
+        return ast
+
 def main(filename):
     with open(filename) as f:
         text = f.read()

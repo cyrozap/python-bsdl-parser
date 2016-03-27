@@ -99,7 +99,7 @@ pin_spec = identifier_list:identifier_list colon pin_type:pin_type port_dimensio
 identifier_list = (comma).{[port_name]} ;
 pin_type = "in" | "out" | "buffer" | "inout" | "LINKAGE_INOUT" |
     "LINKAGE_BUFFER" | "LINKAGE_IN" | "LINKAGE_OUT" | "LINKAGE_MECHANICAL" |
-    "POWER_0" | "POWER_POS" | "POWER_NEG" | "VREF_IN" | "VREF_OUT" ;
+    "POWER_0" | "POWER_POS" | "POWER_NEG" | "VREF_IN" | "VREF_OUT" | "linkage";
 port_dimension = bit_vector_spec | "bit" ;
 bit_vector_spec  = "bit_vector" left_paren bit_vector:range right_paren ;
 range = up_range | down_range ;

@@ -481,14 +481,14 @@ power_port_association_list = power_port_id colon port_association_list ;
 power_port_id = port_id ;
 
 (* B.8.24 *)
-bsdl_extensions = extension_declaration | extension_definition ;
-extension_declaration = "attribute" extension_name colon "BSDL_EXTENSION" semicolon ;
-extension_definition = "attribute" extension_name "of" target
-    "is" extension_parameter_string semicolon ;
+bsdl_extensions = @:extension_declaration | @:extension_definition ;
+extension_declaration = "attribute" extension_name:extension_name colon "BSDL_EXTENSION" semicolon ;
+extension_definition = "attribute" extension_name:extension_name "of" target
+    "is" extension_parameters:extension_parameter_string semicolon ;
 extension_name = entity_defined_name | bsdl_package_defined_name ;
 entity_defined_name = vhdl_identifier ;
 bsdl_package_defined_name = vhdl_identifier ;
-extension_parameter_string = string ;
+extension_parameter_string = "&".{[string]} ;
 
 (* B.8.25 *)
 design_warning = "attribute" "DESIGN_WARNING" "of" target "is" "&".{[@:string]} semicolon ;

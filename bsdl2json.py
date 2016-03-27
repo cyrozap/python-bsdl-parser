@@ -35,7 +35,7 @@ def main(filename):
         text = f.read()
         parser = std_1149_1_2013.std_1149_1_2013Parser()
         ast = parser.parse(text, "bsdl_description", semantics=BsdlSemantics())
-        print(json.dumps(ast, indent=2))
+        print(json.dumps(ast))
 
 
 if __name__ == "__main__":

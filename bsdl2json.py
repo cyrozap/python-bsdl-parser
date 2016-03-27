@@ -19,173 +19,24 @@
 
 
 import json
-import re
 import sys
 
+import std_1149_1_2013
 
-class BsdlFile:
-    def __init__(self, bsdl_file):
-        self.bsdl_file = bsdl_file
-        self.entity = ""
-        self.package = ""
-        self.port_desc = {}
-        self.pin_map = {}
-        self.instruction_length = 0
-        self.instruction_opcodes = {}
-        self.idcode = ""
-        self.boundary_length = 0
-        self.boundary_register = {}
 
-    def parse(self):
-        file_lines = open(self.bsdl_file, 'r').readlines()
-        i = 0
-        while i < len(file_lines):
-            line = file_lines[i].strip('\n').strip('\r')
-            compare_line = line.strip().lower()
-            if compare_line.startswith("entity"):
-                regex = re.compile('[a-zA-Z]+\s+(.*)\s+[a-zA-Z]+')
-                self.entity = regex.search(line).group(1)
-                i += 1
-            elif compare_line.startswith("generic"):
-                end = False
-                while not end:
-                    line = file_lines[i].strip('\n').strip('\r')
-                    line = line.strip()
-                    if "--" in line:
-                        line = line.split("--")[0].strip()
-                    if "PHYSICAL_PIN_MAP" in line.upper():
-                        regex = re.compile('\"(.*)\"')
-                        self.package = regex.search(line).group(1)
-                    if ");" in line:
-                        end = True
-                    i += 1
-            elif compare_line.startswith("port"):
-                end = False
-                while not end:
-                    line = file_lines[i].strip('\n').strip('\r')
-                    line = line.strip()
-                    if "--" in line:
-                        line = line.split("--")[0].strip()
-                    if ":" in line:
-                        split_line = line.split(":")
-                        pin_id = split_line[0]
-                        pin_type = split_line[1].strip().rstrip(";")
-                        if pin_id:
-                            if pin_type.endswith("bit") and "linkage" not in pin_type:
-                                self.port_desc[pin_id] = pin_type.split()[0]
-                    if line.startswith(");"):
-                        end = True
-                    i += 1
-            elif len(self.package) > 0 and compare_line.startswith("constant"):
-                pin_map_string = ""
-                end = False
-                while not end:
-                    line = file_lines[i].strip('\n').strip('\r')
-                    line = line.strip()
-                    if "--" in line:
-                        line = line.split("--")[0].strip()
-                    if "\"" in line:
-                        pin_map_string += line.replace("&","").replace("\"","").rstrip(";").strip()
-                    if line.endswith(";"):
-                        pin_map_list = pin_map_string.split(",")
-                        current_signal = None
-                        for item in pin_map_list:
-                            if ":" in item:
-                                split_item = item.split(":")
-                                signal = split_item[0].strip()
-                                pin_name = split_item[1].strip()
-                                if "(" in pin_name:
-                                    current_signal = signal
-                                    pin_name = pin_name.lstrip("(")
-                                self.pin_map[pin_name] = signal
-                            else:
-                                if ")" in item:
-                                    item = item.rstrip(")")
-                                self.pin_map[item] = current_signal
-                        end = True
-                    i += 1
-            elif compare_line.startswith("attribute"):
-                if "INSTRUCTION_LENGTH" in compare_line.upper():
-                        regex = re.compile('\s+([0-9]+)\s*;')
-                        self.instruction_length = int(regex.search(line).group(1))
-                        i += 1
-                elif "INSTRUCTION_OPCODE" in compare_line.upper():
-                    opcodes_string = ""
-                    end = False
-                    while not end:
-                        line = file_lines[i].strip('\n').strip('\r')
-                        line = line.strip()
-                        if "--" in line:
-                            line = line.split("--")[0].strip()
-                        if "\"" in line:
-                            opcodes_string += line.rstrip("&").strip().replace("\"","").rstrip(";")
-                        if line.endswith(";"):
-                            opcodes_list = opcodes_string.split(",")
-                            for opcode in opcodes_list:
-                                split_opcode = opcode.split("(")
-                                mnemonic = split_opcode[0].strip()
-                                code = split_opcode[1].replace(")","").strip()
-                                self.instruction_opcodes[mnemonic] = code
-                            end = True
-                        i += 1
-                elif "IDCODE_REGISTER" in compare_line.upper():
-                    idcode_string = ""
-                    end = False
-                    while not end:
-                        line = file_lines[i].strip('\n').strip('\r')
-                        line = line.strip()
-                        if "--" in line:
-                            line = line.split("--")[0].strip()
-                        if "\"" in line:
-                            idcode_string += line.replace("&","").replace("\"","").rstrip(";").strip()
-                        if line.endswith(";"):
-                            self.idcode = idcode_string
-                            end = True
-                        i += 1
-                elif "BOUNDARY_LENGTH" in compare_line.upper():
-                    regex = re.compile('\s+([0-9]+)\s*;')
-                    self.boundary_length = int(regex.search(line).group(1))
-                    i += 1
-                elif "BOUNDARY_REGISTER" in compare_line.upper():
-                    boundary_register_list = []
-                    end = False
-                    while not end:
-                        line = file_lines[i].strip('\n').strip('\r')
-                        line = line.strip()
-                        if "--" in line:
-                            line = line.split("--")[0].strip()
-                        if "\"" in line:
-                            boundary_register_list.append(line.replace("&","").replace("\"","").rstrip(";").strip())
-                        if line.endswith(";"):
-                            current_bit = None
-                            for item in boundary_register_list:
-                                split_item = item.split("(")
-                                register_bit = int(split_item[0].strip())
-                                signal = split_item[1].replace(")","").rstrip(",").replace(" ","").split(",")
-                                self.boundary_register[register_bit] = signal
-                            end = True
-                        i += 1
-                else:
-                    i += 1
-            else:
-                i += 1
+class BsdlSemantics:
+    def map_string(self, ast):
+        parser = std_1149_1_2013.std_1149_1_2013Parser()
+        ast = parser.parse(''.join(ast), "port_map")
+        return ast
 
-    def __str__(self):
-        dictionary = {
-            "entity": self.entity,
-            "package": self.package,
-            "port_desc": self.port_desc,
-            "pin_map": self.pin_map,
-            "instruction_length": self.instruction_length,
-            "instruction_opcodes": self.instruction_opcodes,
-            "idcode": self.idcode,
-            "boundary_length": self.boundary_length,
-            "boundary_register": self.boundary_register,
-        }
-        return json.dumps(dictionary)
+def main(filename):
+    with open(filename) as f:
+        text = f.read()
+        parser = std_1149_1_2013.std_1149_1_2013Parser()
+        ast = parser.parse(text, "bsdl_description", semantics=BsdlSemantics())
+        print(json.dumps(ast, indent=2))
 
 
 if __name__ == "__main__":
-    bsdl = BsdlFile(sys.argv[1])
-    bsdl.parse()
-    print(bsdl)
+    main(sys.argv[1])

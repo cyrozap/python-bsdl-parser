@@ -1,2 +1,2 @@
 bsdl.py: bsdl.ebnf
-	grako -o $@ $^
+	grako --name bsdl -o $@ $^

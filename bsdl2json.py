@@ -39,8 +39,8 @@ def main(filename):
     with open(filename) as f:
         text = f.read()
         parser = bsdl.bsdlParser()
-        ast = parser.parse(text, "bsdl_description", semantics=BsdlSemantics())
-        print(json.dumps(ast))
+        ast = parser.parse(text, "bsdl_description", semantics=BsdlSemantics(), parseinfo=False)
+        print(json.dumps(ast.asjson()))
 
 
 if __name__ == "__main__":

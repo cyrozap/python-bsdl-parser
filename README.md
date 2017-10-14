@@ -6,7 +6,7 @@ Language (BSDL) files.
 ## Requirements
 
 * Python 3
-* [Grako][Grako]
+* [Grako 3.99.9][Grako]
 
 ## Usage
 

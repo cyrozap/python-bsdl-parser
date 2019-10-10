@@ -13,6 +13,8 @@ Language (BSDL) files.
 First, install the Grako command from [here][Grako]. Then you can run `make` to
 generate the actual parser module (`bsdl.py`).
 
+run `make package` to create a __init__.py file to make this a package
+
 After generating the parser module, run
 `./bsdl2json.py bsdl_file.bsd > json_file.json` to convert your BSDL file to
 JSON.

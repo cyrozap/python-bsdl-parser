@@ -24,7 +24,7 @@ import os
 import argparse
 import glob
 
-import bsdl
+import bsdl_parser.bsdl as bsdl
 
 
 class BsdlSemantics:
@@ -38,7 +38,7 @@ class BsdlSemantics:
         ast = parser.parse(''.join(ast), "group_table")
         return ast
 
-def main(filename, outfilename=None):
+def bsdl2json(filename, outfilename=None):
     with open(filename) as f:
         text = f.read()
         parser = bsdl.bsdlParser()
@@ -49,7 +49,7 @@ def main(filename, outfilename=None):
             with open(outfilename, 'w') as outfile:
                 json.dump(ast.asjson(), outfile)
 
-if __name__ == "__main__":
+def main():
     # Based on: https://gist.github.com/89465127/5273149
     parser = argparse.ArgumentParser(description='Parse bsdl files to json format.')
     parser.add_argument('path', nargs='+', help='Path of a file or a folder of BSDL files.')
@@ -99,4 +99,7 @@ if __name__ == "__main__":
                 outname = os.path.join(outpath, f'{bname}.json')
         if verbose:
             print(f'Processing {f} -> {outname} ...')
-        main(f, outname)
+        bsdl2json(f, outname)
+
+if __name__ == "__main__":
+    main()

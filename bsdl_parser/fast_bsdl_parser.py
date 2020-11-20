@@ -18,20 +18,21 @@ logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
 
 def main(args):
-    file_list = []
+    file_set = set()
     
     if not args.recursive:
-        file_list.append(args.filename)
+        file_set |= set([args.filename])
     else:
         if args.filename is None:
             args.filename = '.'
-        glob_pattern = f'{args.filename}/**/{args.include}'
-        file_list = [f for f in glob.glob(glob_pattern, recursive=True)]
-        
-    logging.info(f'Start procesing {len(file_list)} files.')
+        for incl in args.include:
+            glob_pattern = f'{args.filename}/**/{incl}'
+            file_set |= set(filter(os.path.isfile, [f for f in glob.glob(glob_pattern, recursive=True)]))
+
+    logging.info(f'Start procesing {len(file_set)} files.')
 
     attributes_dict = {}
-    for f in file_list:
+    for f in file_set:
         logging.info(f'Processing {f} ...')
         attributes_dict[f] = get_bsdl_attributes(f)
         print(attributes_dict[f]['IDCODE_REGISTER'])
@@ -42,13 +43,6 @@ def get_bsdl_attributes(filename, verbose=False):
     # Match lines like:
     # attribute INSTRUCTION_LENGTH of corsica: entity is 3;
     pat_attribute = re.compile(r'attribute\s+(\w+)\s+OF\s+\w+\s*:\s+entity\s+is\s+([^;]+);', re.IGNORECASE)
-    # Multi line string pattern:
-    #    "XXX&X" &        
-    #     "0011100" &     
-    #     "000100100" &   
-    #     "00001001001" & 
-    #     "1"
-    pat_mstring = re.compile(r'"(.+)"(\s+&\s+)*', re.IGNORECASE)
 
     file_content = ''
 
@@ -63,12 +57,10 @@ def get_bsdl_attributes(filename, verbose=False):
     for attr in m:
         attr_name = attr.group(1)
         attr_val = attr.group(2)
-        m = re.finditer(pat_mstring, attr_val)
-        if m:
-            attr_val = '"'
-            for s in m:
-                attr_val += s.group(1)
-            attr_val += '"'
+        # Replace multiline attributes to single line:
+        attr_val = re.sub(r'\s*\n\s*', ' ', attr_val)
+        # Replace "XXXX" &  "0011100" style strings to "XXXX0011100" 
+        attr_val = re.sub(r'"\s*&\s*"', '', attr_val)
 
         attributes[attr_name] = attr_val
 
@@ -88,7 +80,7 @@ if __name__ == '__main__':
     parser.add_argument('--recursive', '-r', action='store_true',
         help='Read files recursively.',
         )
-    parser.add_argument('--include', type=str, default='*bsd',
+    parser.add_argument('--include', type=str, action='append', default=['*bsd', '*bsdl'],
         help='Search only files whose base name matches GLOB',
         )
     parser.add_argument('--verbose', '-v', action='store_true',

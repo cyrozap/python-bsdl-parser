@@ -17,7 +17,7 @@ here = os.path.dirname(__file__)
 logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
 
-def main(args):
+def bsdl_attributes(args):
     file_set = set()
     
     if not args.recursive:
@@ -67,8 +67,7 @@ def get_bsdl_attributes(filename, verbose=False):
     return attributes
 
 
-if __name__ == '__main__':
-
+def main():
     parser = argparse.ArgumentParser(
         description='Fast BSDL Parser: https://github.com/cyrozap/python-bsdl-parser is a fully '
         'featured BSDL parser, but it is slow. This Fast BSDL parser parses the attributes fast to '
@@ -96,4 +95,7 @@ if __name__ == '__main__':
         sys.exit(-1)
 
     # Call the main:
-    main(args)
+    bsdl_attributes(args)
+
+if __name__ == '__main__':
+    main()
